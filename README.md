@@ -4,11 +4,14 @@
  
 # Build
 
-cd <smart_contract_directory>
+```cd <smart_contract_directory>
+git clone
+go to directory
 md build
 cd build
 cmake ..
 make
+```
 
 ## License
 
