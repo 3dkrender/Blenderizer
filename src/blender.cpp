@@ -8,7 +8,8 @@
 */
 [[eosio::on_notify("eosio.token::transfer")]] void blender::deposit(name from, name to, asset amount, string memo)
 {
-   if (from != CONTRACTN)
+   // Ignore atomicassets account because of assets with backed tokens
+   if (from != CONTRACTN && from != atomicassets::ATOMICASSETS_ACCOUNT)
    {
       // Does it come from RAM sale?
       if (from == name("eosio.ram"))
