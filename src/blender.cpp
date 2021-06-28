@@ -21,17 +21,23 @@
       }
       else
       {
-         // Is it a deposit? check memo
-         check(memo.size() <= 12, "Wrong name Collection!"); // too much text
-         name collection = name(memo);
+         if (from != name("atomicassets"))
+         {
 
-         // Check if collection exists
-         atomicassets::collections_t _collections(ATOMIC, ATOMIC.value);
-         auto itrCollection = _collections.find(collection.value);
-         check(itrCollection != _collections.end(), "Collection not exist!");
+            // Is it a deposit? check memo
+            check(memo.size() <= 12, "Wrong name Collection!"); // too much text
+            name collection = name(memo);
 
-         // buy RAM
-         buyramproxy(collection, amount);
+            // Check if collection exists
+            atomicassets::collections_t _collections(ATOMIC, ATOMIC.value);
+            auto itrCollection = _collections.find(collection.value);
+            check(itrCollection != _collections.end(), "Collection not exist!");
+
+            // buy RAM
+            buyramproxy(collection, amount);
+         } else {
+            // Is it backed up? Thanks for your support!
+         }
       }
    }
 }
@@ -58,10 +64,11 @@ ACTION blender::withdrawram(name authorized_account, name collection, int64_t by
    check(itrRamBalance->bytes >= bytes, "Error 11: Not enough RAM to sell!");
 
    // Add user to waiting list for refunds
-   _pending_ram.emplace(_self, [&](auto &rec) {
-      rec.owner = authorized_account;
-      rec.ram_bytes = bytes;
-   });
+   _pending_ram.emplace(_self, [&](auto &rec)
+                        {
+                           rec.owner = authorized_account;
+                           rec.ram_bytes = bytes;
+                        });
 
    // Call to sellram action
    sellram(bytes);
@@ -73,9 +80,8 @@ ACTION blender::withdrawram(name authorized_account, name collection, int64_t by
    }
    else
    {
-      _rambalance.modify(itrRamBalance, _self, [&](auto &rec) {
-         rec.bytes = itrRamBalance->bytes - bytes;
-      });
+      _rambalance.modify(itrRamBalance, _self, [&](auto &rec)
+                         { rec.bytes = itrRamBalance->bytes - bytes; });
    }
 }
 
@@ -105,18 +111,18 @@ ACTION blender::createblend(name authorized_user, name target_collection, int32_
    auto itrTarget = _blenders.find(target_template);
    if (itrTarget == _blenders.end())
    {
-      _blenders.emplace(_self, [&](auto &rec) {
-         rec.owner = authorized_user;
-         rec.collection = target_collection;
-         rec.target = target_template;
-         rec.mixture = templates_to_mix;
-      });
+      _blenders.emplace(_self, [&](auto &rec)
+                        {
+                           rec.owner = authorized_user;
+                           rec.collection = target_collection;
+                           rec.target = target_template;
+                           rec.mixture = templates_to_mix;
+                        });
    }
    else
    {
-      _blenders.modify(itrTarget, _self, [&](auto &rec) {
-         rec.mixture = templates_to_mix;
-      });
+      _blenders.modify(itrTarget, _self, [&](auto &rec)
+                       { rec.mixture = templates_to_mix; });
    }
 }
 
@@ -169,9 +175,8 @@ ACTION blender::createblend(name authorized_user, name target_collection, int32_
       burnmixture(asset_ids);
 
       // Update RAM balance (1 NFT = 151 bytes)
-      _rambalance.modify(itrBalance, _self, [&](auto &rec) {
-         rec.bytes = itrBalance->bytes - 151;
-      });
+      _rambalance.modify(itrBalance, _self, [&](auto &rec)
+                         { rec.bytes = itrBalance->bytes - 151; });
    }
 }
 
