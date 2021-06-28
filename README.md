@@ -10,6 +10,9 @@ cd build
 cmake ..
 make
 
+## Support
+If you want to support this proyect you can send backed tokens to burn with blends.
+
 ## License
 
 [MIT](./LICENSE)
