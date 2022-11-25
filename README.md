@@ -13,6 +13,9 @@ cd build
 cmake ..
 make
 ```
+## More information and tutorial
+
+https://blenderizer.3dkrender.com
 
 ## Support
 If you want to support this proyect you can send backed tokens to burn with blends.
