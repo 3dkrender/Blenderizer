@@ -8,7 +8,7 @@
 */
 [[eosio::on_notify("eosio.token::transfer")]] void blender::deposit(name from, name to, asset amount, string memo)
 {
-   if (from != CONTRACTN)
+   if (from != CONTRACTN && to == CONTRACTN)
    {
       // Does it come from RAM sale?
       if (from == name("eosio.ram"))
